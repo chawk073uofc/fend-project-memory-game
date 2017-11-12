@@ -1,7 +1,9 @@
 /*
- * Create a list that holds all of your cards
+ * Creates a list that holds all cards. Called when the user first loads the page or presses the reset button.
  */
-
+function inni(){
+    //moves = 0
+}
 
 /*
  * Display the cards on the page
@@ -36,3 +38,37 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+function cardClicked() {
+    //if face up
+        //do nothing, console msg
+    //else if last flipped == null
+        //flip face up
+    //else if other card just flipped - lastFlipped != null
+
+        // compare cards
+
+}
+
+//card object
+    //faceUp
+    //faceValue
+
+
+function compareFlippedCards(card1, card2) {
+    //moves++
+    //if(card1 != card2) {
+        //flip face down(card1)
+        //flip face down(card2)
+
+}
+
+function resetClicked() {
+
+}
+
+function flipFaceUp(index) {
+
+}
+function unflipFaceDown() {
+
+}

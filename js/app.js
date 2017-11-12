@@ -1,5 +1,6 @@
+
 /*
- * Creates a list that holds all cards. Called when the user first loads the page or presses the reset button.
+ * Creates a list that holds all cards. Called when the user first loads the page or presses the 'reset' or 'play again' buttons.
  */
 function inni(){
     //moves = 0
@@ -49,9 +50,27 @@ function cardClicked() {
 
 }
 
-//card object
-    //faceUp
-    //faceValue
+
+class Card {
+    constructor() {
+        this.faceUp = false;
+        this.faceValue = null;
+    }
+    flip() {
+        if(this.faceUp == false){
+            this.faceUp = true;
+        }
+        else{
+            this.faceUp = false;
+        }
+    }
+    toString() {
+        return "Face Up: " + this.faceUp + "\nFace Value:" + this.faceValue;
+    }
+    equals(otherCard) {
+        return this.faceValue == otherCard.faceValue;
+    }
+}
 
 
 function compareFlippedCards(card1, card2) {

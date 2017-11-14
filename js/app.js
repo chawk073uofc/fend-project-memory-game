@@ -1,11 +1,26 @@
+const NUM_CARDS = 12;
+
 
 /*
  * Creates a list that holds all cards. Called when the user first loads the page or presses the 'reset' or 'play again' buttons.
  */
-function inni(){
-    //moves = 0
+function beginGame(){
+    var deck = allDiamonds();
+    deck = shuffle(deck);
+    drawDeck(deck);
+
 }
 
+/*
+ * Returns a deck of all diamonds
+ */
+function allDiamonds(){
+    var cards = [];
+    for(var i= 0; i < NUM_CARDS; i++) {
+        cards.push(new Card("fa-diamond"));
+    }
+    return cards;
+}
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -15,7 +30,7 @@ function inni(){
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+    let currentIndex = array.length, temporaryValue, randomIndex;
 
     while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
@@ -28,6 +43,17 @@ function shuffle(array) {
     return array;
 }
 
+/*
+ * Create the necessary DOM elements to represent the cards and attach event listeners.
+ */
+function drawDeck(deck) {
+    let deckNode = $(".deck");
+    let cardNode = document.createElement("li");
+    cardNode.addClass("card");
+    for(let card of deck) {
+        deckNode.append(cardNode);
+    }
+}
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -39,6 +65,7 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+
 function cardClicked() {
     //if face up
         //do nothing, console msg
@@ -52,9 +79,9 @@ function cardClicked() {
 
 
 class Card {
-    constructor() {
+    constructor(symbol) {
         this.faceUp = false;
-        this.faceValue = null;
+        this.symbol = symbol;
     }
     flip() {
         if(this.faceUp == false){
@@ -65,10 +92,10 @@ class Card {
         }
     }
     toString() {
-        return "Face Up: " + this.faceUp + "\nFace Value:" + this.faceValue;
+        return "Face Up: " + this.faceUp + "\nFace Value:" + this.symbol;
     }
     equals(otherCard) {
-        return this.faceValue == otherCard.faceValue;
+        return this.symbol == otherCard.symbol;
     }
 }
 

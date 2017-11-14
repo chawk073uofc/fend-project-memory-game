@@ -5,12 +5,15 @@ const NUM_CARDS = 12;
  * Creates a list that holds all cards. Called when the user first loads the page or presses the 'reset' or 'play again' buttons.
  */
 function beginGame(){
-    var deck = allDiamonds();
+    var deck = getDeckFromHTML();
     deck = shuffle(deck);
     drawDeck(deck);
+    console.log("exiting beginGame");
 
 }
-
+function getDeckFromHTML(){
+    return $(".card");
+}
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -37,12 +40,9 @@ function shuffle(array) {
  * Create the necessary DOM elements to represent the cards and attach event listeners.
  */
 function drawDeck(deck) {
+    //clear default deck
     let deckNode = $(".deck");
-    let cardNode = document.createElement("li");
-    cardNode.addClass("card");
-    for(let card of deck) {
-        deckNode.append(cardNode);
-    }
+
 }
 
 /*

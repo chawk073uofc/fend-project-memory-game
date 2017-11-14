@@ -9,10 +9,15 @@ function beginGame(){
     deck = shuffle(deck);
     drawDeck(deck);
     console.log("exiting beginGame");
-
 }
+/*
+ * Read in array of card elements from index.html
+ */
 function getDeckFromHTML(){
     return $(".card");
+}
+function test() {
+    console.log("dkdkdkdkdk");
 }
 /*
  * Display the cards on the page
@@ -41,6 +46,7 @@ function shuffle(array) {
  */
 function drawDeck(deck) {
     //clear default deck
+    //add the collection of jQuery objects stored in deck as children of the deck node
     let deckNode = $(".deck");
 
 }
@@ -66,29 +72,6 @@ function cardClicked() {
         // compare cards
 
 }
-
-
-class Card {
-    constructor(symbol) {
-        this.faceUp = false;
-        this.symbol = symbol;
-    }
-    flip() {
-        if(this.faceUp == false){
-            this.faceUp = true;
-        }
-        else{
-            this.faceUp = false;
-        }
-    }
-    toString() {
-        return "Face Up: " + this.faceUp + "\nFace Value:" + this.symbol;
-    }
-    equals(otherCard) {
-        return this.symbol == otherCard.symbol;
-    }
-}
-
 
 function compareFlippedCards(card1, card2) {
     //moves++

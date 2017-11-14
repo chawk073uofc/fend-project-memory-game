@@ -1,6 +1,3 @@
-const NUM_CARDS = 12;
-
-
 /*
  * Creates a list that holds all cards. Called when the user first loads the page or presses the 'reset' or 'play again' buttons.
  */
@@ -37,7 +34,6 @@ function shuffle(array) {
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
     }
-
     return array;
 }
 
@@ -48,7 +44,6 @@ function drawDeck(deck) {
     //clear default deck
     //add the collection of jQuery objects stored in deck as children of the deck node
     let deckNode = $(".deck");
-
 }
 
 /*

@@ -12,16 +12,6 @@ function beginGame(){
 }
 
 /*
- * Returns a deck of all diamonds
- */
-function allDiamonds(){
-    var cards = [];
-    for(var i= 0; i < NUM_CARDS; i++) {
-        cards.push(new Card("fa-diamond"));
-    }
-    return cards;
-}
-/*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
  *   - loop through each card and create its HTML

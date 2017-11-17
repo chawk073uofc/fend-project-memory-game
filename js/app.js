@@ -44,11 +44,14 @@ function shuffle(array) {
  * Create the necessary DOM elements to represent the cards and attach event listeners.
  */
 function drawDeck(deck) {
+
     //clear default deck from the DOM
-    $(".deck").empty();
-    //add the shuffled deck
-    $(".deck").append(deck);
     let deckNode = $(".deck");
+    deckNode.empty();
+    //add the shuffled deck
+    deckNode.append(deck);
+    //attach event listeners
+    deckNode.on('click', '.card', cardClicked);
 }
 
 /*
@@ -61,8 +64,10 @@ function drawDeck(deck) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
-
 function cardClicked() {
+    console.log("card clicked!");
+    console.log(this);
+    $(this).addClass("open");
     //if face up
         //do nothing, console msg
     //else if last flipped == null

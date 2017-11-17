@@ -1,3 +1,7 @@
+var cardToMatch;//the symbol on the card that was just flipped
+var moves = 0;
+var stars;
+var isAttemptingMatch = false; //true when the user has just flipped over a card and now has a chance to match that card
 beginGame();
 /*
  * Creates a list that holds all cards. Called when the user first loads the page or presses the 'reset' or 'play again' buttons.
@@ -54,6 +58,11 @@ function drawDeck(deck) {
     deckNode.on('click', '.card', cardClicked);
 }
 
+function isMatch(card, cardlToMatch) {
+    let symbol = $(card).children().first().attr('class');
+    cardlToMatch.children().first().hasClass('symbol');
+}
+
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
@@ -65,24 +74,40 @@ function drawDeck(deck) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 function cardClicked() {
-    console.log("card clicked!");
-    console.log(this);
-    $(this).addClass("open");
-    //if face up
-        //do nothing, console msg
+    moves++;
+    console.log("card clicked!" + this);
+
+    if(isAttemptingMatch){
+        if(isMatch(this,cardToMatch)){
+            $(this).addClass("match");
+            $(this).unbind();
+            cardToMatch.unbind();
+        }
+        else{
+            $(this).removeClass("open show");
+            cardToMatch.removeClass("open show");
+        }
+        cardToMatch = null;
+    }
+
+    else{
+        $(this).addClass("open show");
+        cardToMatch = $(this).children().first();
+    }
+
+
     //else if last flipped == null
         //flip face up
     //else if other card just flipped - lastFlipped != null
 
         // compare cards
-
+    //check win condition
 }
 
 function compareFlippedCards(card1, card2) {
     //moves++
     //if(card1 != card2) {
-        //flip face down(card1)
-        //flip face down(card2)
+
 
 }
 

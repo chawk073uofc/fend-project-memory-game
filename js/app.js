@@ -1,11 +1,14 @@
+beginGame();
 /*
  * Creates a list that holds all cards. Called when the user first loads the page or presses the 'reset' or 'play again' buttons.
  */
 function beginGame(){
+    console.log("entering beginGame");
     var deck = getDeckFromHTML();
     deck = shuffle(deck);
+    console.log(deck);
     drawDeck(deck);
-    console.log("exiting beginGame");
+    console.log(deck);
 }
 /*
  * Read in array of card elements from index.html
@@ -41,8 +44,10 @@ function shuffle(array) {
  * Create the necessary DOM elements to represent the cards and attach event listeners.
  */
 function drawDeck(deck) {
-    //clear default deck
-    //add the collection of jQuery objects stored in deck as children of the deck node
+    //clear default deck from the DOM
+    $(".deck").empty();
+    //add the shuffled deck
+    $(".deck").append(deck);
     let deckNode = $(".deck");
 }
 

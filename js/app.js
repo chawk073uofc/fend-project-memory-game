@@ -59,8 +59,9 @@ function drawDeck(deck) {
 }
 
 function isMatch(card, cardlToMatch) {
-    let symbol = $(card).children().first().attr('class');
-    cardlToMatch.children().first().hasClass('symbol');
+    let symbol = $(card).children().first().attr('class').split(' ')[1];
+    console.log("in is match - card symbol = " + symbol);
+    return cardlToMatch.children().first().hasClass(symbol);
 }
 
 /*
@@ -68,7 +69,7 @@ function isMatch(card, cardlToMatch) {
  *  - display the card's symbol (put this functionality in another function that you call from this one)
  *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
  *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
+ *    + if the cards do match, lock the cards in the ope n position (put this functionality in another function that you call from this one)
  *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
@@ -76,7 +77,9 @@ function isMatch(card, cardlToMatch) {
 function cardClicked() {
     moves++;
     console.log("card clicked!" + this);
+    $(this).addClass("open show");
 
+    //must not allow double click of same card to result in a match
     if(isAttemptingMatch){
         if(isMatch(this,cardToMatch)){
             $(this).addClass("match");
@@ -84,32 +87,26 @@ function cardClicked() {
             cardToMatch.unbind();
         }
         else{
+            $(this).on('click', cardClicked());//re-attach event listener
             $(this).removeClass("open show");
             cardToMatch.removeClass("open show");
         }
         cardToMatch = null;
+        isAttemptingMatch = false;
     }
 
     else{
-        $(this).addClass("open show");
+        $(this).unbind();//dissalow double click of same card to result in a match
         cardToMatch = $(this).children().first();
+        isAttemptingMatch = true;
     }
 
 
-    //else if last flipped == null
-        //flip face up
-    //else if other card just flipped - lastFlipped != null
 
-        // compare cards
     //check win condition
 }
 
-function compareFlippedCards(card1, card2) {
-    //moves++
-    //if(card1 != card2) {
 
-
-}
 
 function resetClicked() {
 

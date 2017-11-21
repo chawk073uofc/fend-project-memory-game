@@ -1,7 +1,8 @@
-var cardToMatch;//the symbol on the card that was just flipped
-var moves = 0;
-var stars;
-var isAttemptingMatch = false; //true when the user has just flipped over a card and now has a chance to match that card
+let symbolToMatch;//the symbol on the card that was just flipped
+let cardToMatch
+let moves = 0;
+let stars;
+let isAttemptingMatch = false; //true when the user has just flipped over a card and now has a chance to match that card
 beginGame();
 /*
  * Creates a list that holds all cards. Called when the user first loads the page or presses the 'reset' or 'play again' buttons.
@@ -87,40 +88,33 @@ function cardClicked() {
 
     //must not allow double click of same card to result in a match
     if(isAttemptingMatch){
-        if(isMatch(this,cardToMatch)){
+        if(symbol === symbolToMatch){
             card.addClass("match");
+            cardToMatch.addClass("match");
             card.unbind();
-            cardToMatch.unbind();
+
+            //check win condition
         }
         else{
-            card.on('click', cardClicked());//re-attach event listener
+            card.on('click', cardClicked);//re-attach event listener
+            cardToMatch.on('click', cardClicked);//re-attach event listener
             card.removeClass("open show");
             cardToMatch.removeClass("open show");
         }
+        symbolToMatch = null;
         cardToMatch = null;
         isAttemptingMatch = false;
     }
 
     else{
-        card.unbind();//dissalow double click of same card to result in a match
-        cardToMatch = card.children().first();
+        card.unbind();//disalow double click of same card to result in a match
+        cardToMatch = card;
+        symbolToMatch = symbol;
         isAttemptingMatch = true;
     }
 
-
-
-    //check win condition
 }
-
-
 
 function resetClicked() {
-
-}
-
-function flipFaceUp(index) {
-
-}
-function unflipFaceDown() {
 
 }

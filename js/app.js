@@ -64,6 +64,10 @@ function isMatch(card, cardlToMatch) {
     return cardlToMatch.children().first().hasClass(symbol);
 }
 
+function getSymbol(card) {
+    return card.children().attr('class').substr(3);
+}
+
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
@@ -77,18 +81,20 @@ function isMatch(card, cardlToMatch) {
 function cardClicked() {
     moves++;
     console.log("card clicked!" + this);
-    $(this).addClass("open show");
+    let card = $(this);
+    let symbol = getSymbol(card);
+    card.addClass("open show");
 
     //must not allow double click of same card to result in a match
     if(isAttemptingMatch){
         if(isMatch(this,cardToMatch)){
-            $(this).addClass("match");
-            $(this).unbind();
+            card.addClass("match");
+            card.unbind();
             cardToMatch.unbind();
         }
         else{
-            $(this).on('click', cardClicked());//re-attach event listener
-            $(this).removeClass("open show");
+            card.on('click', cardClicked());//re-attach event listener
+            card.removeClass("open show");
             cardToMatch.removeClass("open show");
         }
         cardToMatch = null;
@@ -96,8 +102,8 @@ function cardClicked() {
     }
 
     else{
-        $(this).unbind();//dissalow double click of same card to result in a match
-        cardToMatch = $(this).children().first();
+        card.unbind();//dissalow double click of same card to result in a match
+        cardToMatch = card.children().first();
         isAttemptingMatch = true;
     }
 

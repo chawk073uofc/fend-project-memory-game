@@ -51,7 +51,6 @@ function shuffle(array) {
  * Create the necessary DOM elements to represent the cards and attach event listeners.
  */
 function drawDeck(deck) {
-
     //clear default deck from the DOM
     let deckNode = $(".deck");
     deckNode.empty();
@@ -59,12 +58,6 @@ function drawDeck(deck) {
     deckNode.append(deck);
     //attach event listeners
     deckNode.on('click', '.card', cardClicked);
-}
-
-function isMatch(card, cardlToMatch) {
-    let symbol = $(card).children().first().attr('class').split(' ')[1];
-    console.log("in is match - card symbol = " + symbol);
-    return cardlToMatch.children().first().hasClass(symbol);
 }
 
 function getSymbol(card) {
@@ -86,7 +79,7 @@ async function cardClicked() {
     console.log("card clicked!" + this);
     //this.off();
     let card = $(this);
-    card.off();
+    card.off("click", card, cardClicked);
     let symbol = getSymbol(card);
     card.addClass("open show");
 

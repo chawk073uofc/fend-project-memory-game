@@ -1,6 +1,8 @@
 let symbolToMatch;//the symbol on the card that was just flipped
 let cardToMatch
 let moves = 0;
+let matches = 0;
+const MAX_MATCHES = 8;
 let stars;
 let isAttemptingMatch = false; //true when the user has just flipped over a card and now has a chance to match that card
 beginGame();
@@ -79,25 +81,31 @@ function getSymbol(card) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
-function cardClicked() {
+async function cardClicked() {
     moves++;
     console.log("card clicked!" + this);
+    //this.off();
     let card = $(this);
+    card.off();
     let symbol = getSymbol(card);
     card.addClass("open show");
 
     //must not allow double click of same card to result in a match
     if(isAttemptingMatch){
         if(symbol === symbolToMatch){
+            matches++;
             card.addClass("match");
             cardToMatch.addClass("match");
-            card.unbind();
-
             //check win condition
+            if(matches == MAX_MATCHES){
+                console.log("You have won!");
+            }
         }
         else{
+
             card.on('click', cardClicked);//re-attach event listener
             cardToMatch.on('click', cardClicked);//re-attach event listener
+            await sleep(1000);
             card.removeClass("open show");
             cardToMatch.removeClass("open show");
         }
@@ -107,7 +115,7 @@ function cardClicked() {
     }
 
     else{
-        card.unbind();//disalow double click of same card to result in a match
+        card.off();//disalow double click of same card to result in a match
         cardToMatch = card;
         symbolToMatch = symbol;
         isAttemptingMatch = true;
@@ -117,4 +125,11 @@ function cardClicked() {
 
 function resetClicked() {
 
+}
+/*
+ * Pauses execution a given number of milliseconds.
+ * Taken from https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep
+ */
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }

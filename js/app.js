@@ -24,7 +24,7 @@ function getDeckFromHTML(){
     return $(".card");
 }
 function test() {
-    console.log("dkdkdkdkdk");
+    console.log("test test test");
 }
 /*
  * Display the cards on the page
@@ -57,7 +57,7 @@ function drawDeck(deck) {
     //add the shuffled deck
     deckNode.append(deck);
     //attach event listeners
-    deckNode.on('click', '.card', cardClicked);
+    //deckNode.on('click', '.card', cardClicked);
 }
 
 function getSymbol(card) {
@@ -79,9 +79,11 @@ async function cardClicked() {
     console.log("card clicked!" + this);
     //this.off();
     let card = $(this);
-    card.off("click", card, cardClicked);
+    card.off();
+    //card.off("click", card, cardClicked);
     let symbol = getSymbol(card);
     card.addClass("open show");
+    //$('.deck').off('click', $('.open'), cardClicked);
 
     //must not allow double click of same card to result in a match
     if(isAttemptingMatch){

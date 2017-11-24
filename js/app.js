@@ -10,12 +10,10 @@ beginGame();
  * Creates a list that holds all cards. Called when the user first loads the page or presses the 'reset' or 'play again' buttons.
  */
 function beginGame(){
-    console.log("entering beginGame");
+    //clear stats
     var deck = getDeckFromHTML();
     deck = shuffle(deck);
-    console.log(deck);
     drawDeck(deck);
-    console.log(deck);
 }
 /*
  * Read in array of card elements from index.html
@@ -74,16 +72,13 @@ function getSymbol(card) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
-async function cardClicked() {
+async function cardClicked(thisCard) {
+    //TODO: detach event listener
     moves++;
     console.log("card clicked!" + this);
-    //this.off();
-    let card = $(this);
-    card.off();
-    //card.off("click", card, cardClicked);
-    let symbol = getSymbol(card);
+    let card = $(thisCard);
     card.addClass("open show");
-    //$('.deck').off('click', $('.open'), cardClicked);
+    let symbol = getSymbol(card);
 
     //must not allow double click of same card to result in a match
     if(isAttemptingMatch){
@@ -91,6 +86,7 @@ async function cardClicked() {
             matches++;
             card.addClass("match");
             cardToMatch.addClass("match");
+
             //check win condition
             if(matches == MAX_MATCHES){
                 console.log("You have won!");
@@ -100,7 +96,7 @@ async function cardClicked() {
 
             card.on('click', cardClicked);//re-attach event listener
             cardToMatch.on('click', cardClicked);//re-attach event listener
-            await sleep(1000);
+            await sleep(250);
             card.removeClass("open show");
             cardToMatch.removeClass("open show");
         }

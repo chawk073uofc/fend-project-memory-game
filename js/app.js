@@ -1,5 +1,41 @@
-$('.restart').on('click', beginGame);
+var gameState = {
+    symbolToMatch: null,//the symbol on the card that was just flipped
+    cardToMatch: null,
+    moves: 0,
+    matches: 0,
+    MAX_MATCHES: 8,
+    stars: 0,
+    isAttemptingMatch: false, //true when the user has just flipped over a card and now has a chance to match that card
+    incrementMoves : function() {
+        this.moves++;
+        $('.moves').text(this.moves);
+        //inc stars
+    },
+    setCardToMatch : function(card, symbol) {
+        this.cardToMatch = card;
+        this.isAttemptingMatch = true;
+        this.symbolToMatch = symbol;
+    },
+    reset: function () {
+        $('.restart').on('click', beginGame);
+        this.symbolToMatch = this.cardToMatch = null;
+        this.moves = this.matches = this.stars = 0;
+        $('.moves').text('0');
+    }
+};
+
 beginGame();
+
+/*
+ * Creates a list that holds all cards. Called when the user first loads the page or presses the 'reset' or 'play again' buttons.
+ */
+function beginGame(){
+    gameState.reset();
+    var deck = getDeckFromHTML();
+    deck = shuffle(deck);
+    //deck = attachEventListeners(deck);
+    drawDeck(deck);
+}
 
 function attachEventListeners(deck) {
     //$(deck[0]).on('click', cardClicked);
@@ -7,40 +43,13 @@ function attachEventListeners(deck) {
     //return deck;
 }
 
-let gameState = {
-    symbolToMatch,//the symbol on the card that was just flipped
-    cardToMatch,
-    moves: 0,
-    matches: 0,
-    MAX_MATCHES: 8,
-    stars: 0,
-    isAttemptingMatch: false, //true when the user has just flipped over a card and now has a chance to match that card
-    incrementMoves : function() {
-       this.moves++;
-       $('.moves').text(this.moves);
-    },
-    reset: function () {
-        this.symbolToMatch = this.cardToMatch = null;
-        this.moves = this.matches = this.stars = 0;
-        $('.moves').text('0');
-    }
-}
-/*
- * Creates a list that holds all cards. Called when the user first loads the page or presses the 'reset' or 'play again' buttons.
- */
-function beginGame(){
-    gameState.reset();
-    var deck = getDeckFromHTML();
-    //deck = shuffle(deck);
-    //deck = attachEventListeners(deck);
-    drawDeck(deck);
-}
 /*
  * Read in array of card elements from index.html
  */
 function getDeckFromHTML(){
     return $(".card");
 }
+
 function test() {
     console.log("test test test");
 }
@@ -97,49 +106,44 @@ function getSymbol(card) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 async function cardClicked() {
-    moves++;
+    gameState.incrementMoves();
     console.log("card clicked!" + this);
     let card = $(this);
     card.off();//must not allow double click of same card to result in a match
     card.addClass("open show");
     let symbol = getSymbol(card);
 
-    if(isAttemptingMatch){
-        if(symbol === symbolToMatch){
-            matches++;
+    if(gameState.isAttemptingMatch){
+        //TODO: refactor here
+        if(symbol === gameState.symbolToMatch){
+            gameState.matches++;
             card.addClass("match");
-            cardToMatch.addClass("match");
+            gameState.cardToMatch.addClass("match");
 
             //check win condition
-            if(matches == MAX_MATCHES){
+            if(gameState.matches == gameState.MAX_MATCHES){
                 console.log("You have won!");
             }
         }
         else{
-
-            card.on('click', cardClicked);//re-attach event listener
-            cardToMatch.on('click', cardClicked);//re-attach event listener
+            //TODO: extract method
             await sleep(250);
+            card.on('click', cardClicked);//re-attach event listener
+            gameState.cardToMatch.on('click', cardClicked);//re-attach event listener
             card.removeClass("open show");
-            cardToMatch.removeClass("open show");
+            gameState.cardToMatch.removeClass("open show");
         }
-        symbolToMatch = null;
-        cardToMatch = null;
-        isAttemptingMatch = false;
+        gameState.symbolToMatch = null;
+        gameState.cardToMatch = null;
+        gameState.isAttemptingMatch = false;
     }
 
     else{
-        //card.off();//disalow double click of same card to result in a match
-        cardToMatch = card;
-        symbolToMatch = symbol;
-        isAttemptingMatch = true;
+        gameState.setCardToMatch(card, symbol);
     }
 
 }
 
-function resetClicked() {
-
-}
 /*
  * Pauses execution a given number of milliseconds.
  * Taken from https://stackoverflow.com/questions/951021/what-is-the-javascript-version-of-sleep

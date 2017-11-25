@@ -5,10 +5,13 @@ let matches = 0;
 const MAX_MATCHES = 8;
 let stars;
 let isAttemptingMatch = false; //true when the user has just flipped over a card and now has a chance to match that card
+
 beginGame();
 
 function attachEventListeners(deck) {
+    //$(deck[0]).on('click', cardClicked);
     deck.map(card => {$(card).on('click',cardClicked)});
+    //return deck;
 }
 
 /*
@@ -17,8 +20,8 @@ function attachEventListeners(deck) {
 function beginGame(){
     //clear stats
     var deck = getDeckFromHTML();
-    deck = shuffle(deck);
-    attachEventListeners(deck);
+    //deck = shuffle(deck);
+    //deck = attachEventListeners(deck);
     drawDeck(deck);
 }
 /*
@@ -58,6 +61,12 @@ function drawDeck(deck) {
     //clear default deck from the DOM
     let deckNode = $(".deck");
     deckNode.empty();
+    //attachEventListeners(deck);
+    //$(deck[0]).on('click', cardClicked);
+    for(i = 0; i < deck.length; i++) {
+        $(deck[i]).on('click', cardClicked);
+    }
+    //$(deck).map(card => {$(card).on('click',cardClicked)});
     //add the shuffled deck
     deckNode.append(deck);
 }

@@ -6,6 +6,11 @@ const MAX_MATCHES = 8;
 let stars;
 let isAttemptingMatch = false; //true when the user has just flipped over a card and now has a chance to match that card
 beginGame();
+
+function attachEventListeners(deck) {
+    deck.map(card => {$(card).on('click',cardClicked)});
+}
+
 /*
  * Creates a list that holds all cards. Called when the user first loads the page or presses the 'reset' or 'play again' buttons.
  */
@@ -13,6 +18,7 @@ function beginGame(){
     //clear stats
     var deck = getDeckFromHTML();
     deck = shuffle(deck);
+    attachEventListeners(deck);
     drawDeck(deck);
 }
 /*
@@ -56,6 +62,7 @@ function drawDeck(deck) {
     deckNode.append(deck);
     //attach event listeners
     //deckNode.on('click', '.card', cardClicked);
+
 }
 
 function getSymbol(card) {
@@ -72,11 +79,12 @@ function getSymbol(card) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
-async function cardClicked(thisCard) {
+async function cardClicked() {
     //TODO: detach event listener
     moves++;
     console.log("card clicked!" + this);
-    let card = $(thisCard);
+    //let card = $(thisCard);
+    let card = $(this);
     card.addClass("open show");
     let symbol = getSymbol(card);
 

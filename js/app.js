@@ -30,8 +30,8 @@ beginGame();
  * Creates a list that holds all cards. Called when the user first loads the page or presses the 'reset' or 'play again' buttons.
  */
 function beginGame(){
-    gameState.reset();
     var deck = getDeckFromHTML();
+    gameState.reset();
     deck = shuffle(deck);
     //deck = attachEventListeners(deck);
     drawDeck(deck);
@@ -82,11 +82,8 @@ function drawDeck(deck) {
     let deckNode = $(".deck");
     deckNode.empty();
     //attachEventListeners(deck);
-    //$(deck[0]).on('click', cardClicked);
-    for(i = 0; i < deck.length; i++) {
-        $(deck[i]).on('click', cardClicked);
-    }
-    //$(deck).map(card => {$(card).on('click',cardClicked)});
+    $(deck).on('click', cardClicked);
+    $(deck).removeClass('open match show');
     //add the shuffled deck
     deckNode.append(deck);
 }

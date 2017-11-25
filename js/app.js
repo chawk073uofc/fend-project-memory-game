@@ -60,9 +60,6 @@ function drawDeck(deck) {
     deckNode.empty();
     //add the shuffled deck
     deckNode.append(deck);
-    //attach event listeners
-    //deckNode.on('click', '.card', cardClicked);
-
 }
 
 function getSymbol(card) {
@@ -80,10 +77,8 @@ function getSymbol(card) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 async function cardClicked() {
-    //TODO: detach event listener
     moves++;
     console.log("card clicked!" + this);
-    //let card = $(thisCard);
     let card = $(this);
     card.addClass("open show");
     let symbol = getSymbol(card);

@@ -1,11 +1,4 @@
-let symbolToMatch;//the symbol on the card that was just flipped
-let cardToMatch
-let moves = 0;
-let matches = 0;
-const MAX_MATCHES = 8;
-let stars;
-let isAttemptingMatch = false; //true when the user has just flipped over a card and now has a chance to match that card
-
+$('.restart').on('click', beginGame);
 beginGame();
 
 function attachEventListeners(deck) {
@@ -14,11 +7,29 @@ function attachEventListeners(deck) {
     //return deck;
 }
 
+let gameState = {
+    symbolToMatch,//the symbol on the card that was just flipped
+    cardToMatch,
+    moves: 0,
+    matches: 0,
+    MAX_MATCHES: 8,
+    stars: 0,
+    isAttemptingMatch: false, //true when the user has just flipped over a card and now has a chance to match that card
+    incrementMoves : function() {
+       this.moves++;
+       $('.moves').text(this.moves);
+    },
+    reset: function () {
+        this.symbolToMatch = this.cardToMatch = null;
+        this.moves = this.matches = this.stars = 0;
+        $('.moves').text('0');
+    }
+}
 /*
  * Creates a list that holds all cards. Called when the user first loads the page or presses the 'reset' or 'play again' buttons.
  */
 function beginGame(){
-    //clear stats
+    gameState.reset();
     var deck = getDeckFromHTML();
     //deck = shuffle(deck);
     //deck = attachEventListeners(deck);
@@ -89,10 +100,10 @@ async function cardClicked() {
     moves++;
     console.log("card clicked!" + this);
     let card = $(this);
+    card.off();//must not allow double click of same card to result in a match
     card.addClass("open show");
     let symbol = getSymbol(card);
 
-    //must not allow double click of same card to result in a match
     if(isAttemptingMatch){
         if(symbol === symbolToMatch){
             matches++;
@@ -118,7 +129,7 @@ async function cardClicked() {
     }
 
     else{
-        card.off();//disalow double click of same card to result in a match
+        //card.off();//disalow double click of same card to result in a match
         cardToMatch = card;
         symbolToMatch = symbol;
         isAttemptingMatch = true;

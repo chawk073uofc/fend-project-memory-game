@@ -17,7 +17,6 @@ var gameState = {
         this.symbolToMatch = symbol;
     },
     reset: function () {
-        $('.restart').on('click', beginGame);
         this.symbolToMatch = this.cardToMatch = null;
         this.moves = this.matches = this.stars = 0;
         $('.moves').text('0');
@@ -39,8 +38,10 @@ function beginGame(){
 
 function attachEventListeners(deck) {
     //$(deck[0]).on('click', cardClicked);
-    deck.map(card => {$(card).on('click',cardClicked)});
+    //deck.map(card => {$(card).on('click',cardClicked)});
     //return deck;
+    $('.restart').on('click', beginGame);
+    return $(deck).on('click', cardClicked);
 }
 
 /*
@@ -81,8 +82,9 @@ function drawDeck(deck) {
     //clear default deck from the DOM
     let deckNode = $(".deck");
     deckNode.empty();
-    //attachEventListeners(deck);
-    $(deck).on('click', cardClicked);
+    //$(deck).on('click', cardClicked);
+    deck = attachEventListeners(deck);
+
     $(deck).removeClass('open match show');
     //add the shuffled deck
     deckNode.append(deck);
@@ -104,7 +106,6 @@ function getSymbol(card) {
  */
 async function cardClicked() {
     gameState.incrementMoves();
-    console.log("card clicked!" + this);
     let card = $(this);
     card.off();//must not allow double click of same card to result in a match
     card.addClass("open show");

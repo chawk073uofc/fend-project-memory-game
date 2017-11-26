@@ -1,5 +1,4 @@
-var gameState = {
-    symbolToMatch: null,//the symbol on the card that was just flipped
+let gameState = {
     cardToMatch: null,
     moves: 0,
     matches: 0,
@@ -7,17 +6,17 @@ var gameState = {
     stars: 0,
     isAttemptingMatch: false, //true when the user has just flipped over a card and now has a chance to match that card
     incrementMoves : function() {
+        //todo 1 move not  moves
         this.moves++;
         $('.moves').text(this.moves);
-        //inc stars
+        //todo inc stars
     },
-    setCardToMatch : function(card, symbol) {
+    setCardToMatch : function(card) {
         this.cardToMatch = card;
         this.isAttemptingMatch = true;
-        this.symbolToMatch = symbol;
     },
     reset: function () {
-        this.symbolToMatch = this.cardToMatch = null;
+        this.cardToMatch = null;
         this.moves = this.matches = this.stars = 0;
         $('.moves').text('0');
     }
@@ -26,20 +25,22 @@ var gameState = {
 beginGame();
 
 /*
- * Creates a list that holds all cards. Called when the user first loads the page or presses the 'reset' or 'play again' buttons.
+ * Called when page loads or user clicks the reset button.
  */
 function beginGame(){
-    var deck = getDeckFromHTML();
+    let deck = getDeckFromHTML();
     gameState.reset();
     deck = shuffle(deck);
     //deck = attachEventListeners(deck);
     drawDeck(deck);
 }
 
+/**
+ * Attach event listeners to all card elements and the reset button.
+ * @param deck
+ * @returns {*|jQuery}
+ */
 function attachEventListeners(deck) {
-    //$(deck[0]).on('click', cardClicked);
-    //deck.map(card => {$(card).on('click',cardClicked)});
-    //return deck;
     $('.restart').on('click', beginGame);
     return $(deck).on('click', cardClicked);
 }
@@ -51,17 +52,10 @@ function getDeckFromHTML(){
     return $(".card");
 }
 
-function test() {
-    console.log("test test test");
-}
 /*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
+ *   Shuffle the card elements.
+ *   Shuffle function from http://stackoverflow.com/a/2450976
  */
-
-// Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     let currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -82,16 +76,40 @@ function drawDeck(deck) {
     //clear default deck from the DOM
     let deckNode = $(".deck");
     deckNode.empty();
-    //$(deck).on('click', cardClicked);
     deck = attachEventListeners(deck);
-
     $(deck).removeClass('open match show');
-    //add the shuffled deck
     deckNode.append(deck);
 }
 
+/**
+ * Returns a given card's symbol.
+ * @param card
+ * @returns {string} the given card's symbol.
+ */
 function getSymbol(card) {
     return card.children().attr('class').substr(3);
+}
+
+function isMatch(card) {
+    return getSymbol(card) === getSymbol(gameState.cardToMatch);
+}
+
+async function resetMismatchedCards(card) {
+    await sleep(250); //allow the user to see the symbol of the card just revealed
+    card.on('click', cardClicked);//re-attach event listener
+    gameState.cardToMatch.on('click', cardClicked);//re-attach event listener
+    card.removeClass("open show");
+    gameState.cardToMatch.removeClass("open show");
+}
+
+function checkWinCondition() {
+    if (gameState.matches === gameState.MAX_MATCHES) {
+        console.log("You have won!");
+    }
+}
+
+function markAsMatched(card) {
+    card.addClass("match");
 }
 
 /*
@@ -108,36 +126,26 @@ async function cardClicked() {
     gameState.incrementMoves();
     let card = $(this);
     card.off();//must not allow double click of same card to result in a match
+
     card.addClass("open show");
-    let symbol = getSymbol(card);
 
     if(gameState.isAttemptingMatch){
-        //TODO: refactor here
-        if(symbol === gameState.symbolToMatch){
+        if(isMatch(card)){
             gameState.matches++;
-            card.addClass("match");
-            gameState.cardToMatch.addClass("match");
-
-            //check win condition
-            if(gameState.matches == gameState.MAX_MATCHES){
-                console.log("You have won!");
-            }
+            markAsMatched(card);
+            markAsMatched(gameState.cardToMatch);
+            checkWinCondition();
         }
         else{
-            //TODO: extract method
-            await sleep(250);
-            card.on('click', cardClicked);//re-attach event listener
-            gameState.cardToMatch.on('click', cardClicked);//re-attach event listener
-            card.removeClass("open show");
-            gameState.cardToMatch.removeClass("open show");
+            await resetMismatchedCards(card);
         }
-        gameState.symbolToMatch = null;
+
         gameState.cardToMatch = null;
         gameState.isAttemptingMatch = false;
     }
 
     else{
-        gameState.setCardToMatch(card, symbol);
+        gameState.setCardToMatch(card);
     }
 
 }

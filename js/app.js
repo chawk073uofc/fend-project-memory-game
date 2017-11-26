@@ -47,6 +47,7 @@ beginGame();
  * Called when page loads or user clicks the reset button.
  */
 function beginGame(){
+    $('#win-modal').modal();
     let deck = getDeckFromHTML();
     gameState.reset();
     deck = shuffle(deck);

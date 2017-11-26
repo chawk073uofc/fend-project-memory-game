@@ -1,10 +1,19 @@
+/**
+ * User must match all cards in fewer than the threshold number of moves to finish with 1, 2, or 3 stars respectively.
+ */
 function updateStars() {
-    const THREE_STAR_THRESHOLD = 5;
-    const TWO_STAR_THRESHOLD = 10;
-    const ONE_STAR_THRESHOLD = 15;
-    let stars = $('.stars').children();
+    const THREE_STAR_THRESHOLD = 20;
+    const TWO_STAR_THRESHOLD = 45;
+    const ONE_STAR_THRESHOLD = 75;
+    let stars = $('.star');
     if(gameState.moves === THREE_STAR_THRESHOLD){
-        stars[2].removeClass('fa-star').addClass('fa-star-o');
+        $(stars[2]).removeClass("fa-star").addClass("fa-star-o");
+    }
+    else if(gameState.moves === TWO_STAR_THRESHOLD) {
+        $(stars[1]).removeClass("fa-star").addClass("fa-star-o");
+    }
+    else if(gameState.moves === ONE_STAR_THRESHOLD) {
+        $(stars[0]).removeClass("fa-star").addClass("fa-star-o");
     }
 }
 
@@ -41,7 +50,6 @@ function beginGame(){
     let deck = getDeckFromHTML();
     gameState.reset();
     deck = shuffle(deck);
-    //deck = attachEventListeners(deck);
     drawDeck(deck);
 }
 

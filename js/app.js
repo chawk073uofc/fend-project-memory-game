@@ -7,12 +7,15 @@ function updateStars() {
     const ONE_STAR_THRESHOLD = 75;
     let stars = $('.star');
     if(gameState.moves === THREE_STAR_THRESHOLD){
+        this.stars = 2;
         $(stars[2]).removeClass("fa-star").addClass("fa-star-o");
     }
     else if(gameState.moves === TWO_STAR_THRESHOLD) {
+        this.stars = 1;
         $(stars[1]).removeClass("fa-star").addClass("fa-star-o");
     }
     else if(gameState.moves === ONE_STAR_THRESHOLD) {
+        this.stars = 0;
         $(stars[0]).removeClass("fa-star").addClass("fa-star-o");
     }
 }
@@ -20,9 +23,10 @@ function updateStars() {
 let gameState = {
     cardToMatch: null,
     moves: 0,
+    startTime: new Date(),
     matches: 0,
     MAX_MATCHES: 8,
-    stars: 0,
+    stars: 3,
     isAttemptingMatch: false, //true when the user has just flipped over a card and now has a chance to match that card
     incrementMoves : function() {
         this.moves++;
@@ -36,7 +40,9 @@ let gameState = {
     },
     reset: function () {
         this.cardToMatch = null;
-        this.moves = this.matches = this.stars = 0;
+        this.moves = this.matches = 0;
+        this.startTime = new Date();
+        this.stars = 3;
         $('.moves').text('0');
     }
 };
@@ -47,7 +53,6 @@ beginGame();
  * Called when page loads or user clicks the reset button.
  */
 function beginGame(){
-    $("#win-modal").modal();
     let deck = getDeckFromHTML();
     gameState.reset();
     deck = shuffle(deck);
@@ -141,13 +146,21 @@ async function resetMismatchedCards(card) {
     flipFaceDown(gameState.cardToMatch);
 }
 
+function getTimeElapsed() {
+    const endTime = new Date();
+    const timeElapsed_ms = endTime - gameState.startTime;
+    return timeElapsed_ms/1000;//convert ms to sec
+}
+
 /**
  * Check if all cards have been matched and display win message if so.
  */
 function checkWinCondition() {
-    if (gameState.matches === gameState.MAX_MATCHES) {
-        console.log("You have won!");
-    }
+    //if (gameState.matches === gameState.MAX_MATCHES) {
+    $('.btn-primary').on('click', beginGame);
+    $(".modal-body").text(`Thank you for playing. You have completed the game in ${getTimeElapsed()} seconds with ${gameState.stars} stars`);
+        $("#win-modal").modal();
+    //}
 }
 /**
  * Indicate that card has been matches and is now locked by changing its color.

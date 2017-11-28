@@ -157,7 +157,6 @@ function getTimeElapsed() {
  * Check if all cards have been matched and if so display win message.
  */
 function checkWinCondition() {
-    //if (gameState.matches === gameState.MAX_MATCHES) {
     $('.btn-primary').on('click', beginGame);
     $(".modal-body").text(`Thank you for playing. You have completed the game in ${getTimeElapsed()} seconds with ${gameState.stars} stars`);
         $("#win-modal").modal();

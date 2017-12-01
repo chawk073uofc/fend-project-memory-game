@@ -50,6 +50,10 @@ let gameState = {
 
 beginGame();
 
+/**
+ * Show user the time elapsed since beginning the game ever second.
+ * @returns {Promise.<void>}
+ */
 async function showTimeElapsed() {
     while(true) {
         await sleep(1000);

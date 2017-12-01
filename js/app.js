@@ -168,11 +168,11 @@ function getTimeElapsed() {
  * Check if all cards have been matched and display win message if so.
  */
 function checkWinCondition() {
-    //if (gameState.matches === gameState.MAX_MATCHES) {
-    $('.btn-primary').on('click', beginGame);
-    $(".modal-body").text(`Thank you for playing. You have completed the game in ${getTimeElapsed()} seconds with ${gameState.stars} stars`);
-        $("#win-modal").modal();
-    //}
+    if (gameState.matches === gameState.MAX_MATCHES) {
+        $('.btn-primary').on('click', beginGame);
+        $(".modal-body").text(`Thank you for playing. You have completed the game in ${getTimeElapsed()} seconds with ${gameState.stars} stars`);
+            $("#win-modal").modal();
+    }
 }
 /**
  * Indicate that card has been matches and is now locked by changing its color.

@@ -1,25 +1,7 @@
 /**
- * User must match all cards in fewer than the threshold number of moves to finish with 1, 2, or 3 stars respectively.
+ * Keeps track of all important stats related to the game such as number of moves, stars awarded, and number of matches.
+ * @type {{cardToMatch: null, moves: number, startTime: Date, matches: number, MAX_MATCHES: number, stars: number, isAttemptingMatch: boolean, incrementMoves: gameState.incrementMoves, setCardToMatch: gameState.setCardToMatch, reset: gameState.reset}}
  */
-function updateStars() {
-    const THREE_STAR_THRESHOLD = 20;
-    const TWO_STAR_THRESHOLD = 45;
-    const ONE_STAR_THRESHOLD = 75;
-    let stars = $('.star');
-    if(gameState.moves === THREE_STAR_THRESHOLD){
-        this.stars = 2;
-        $(stars[2]).removeClass("fa-star").addClass("fa-star-o");
-    }
-    else if(gameState.moves === TWO_STAR_THRESHOLD) {
-        this.stars = 1;
-        $(stars[1]).removeClass("fa-star").addClass("fa-star-o");
-    }
-    else if(gameState.moves === ONE_STAR_THRESHOLD) {
-        this.stars = 0;
-        $(stars[0]).removeClass("fa-star").addClass("fa-star-o");
-    }
-}
-
 let gameState = {
     cardToMatch: null,
     moves: 0,
@@ -72,6 +54,28 @@ function beginGame(){
 }
 
 /**
+ * User must match all cards in fewer than the threshold number of moves to finish with 1, 2, or 3 stars respectively.
+ */
+function updateStars() {
+    const THREE_STAR_THRESHOLD = 20;
+    const TWO_STAR_THRESHOLD = 45;
+    const ONE_STAR_THRESHOLD = 75;
+    let stars = $('.star');
+    if(gameState.moves === THREE_STAR_THRESHOLD){
+        this.stars = 2;
+        $(stars[2]).removeClass('fa-star').addClass('fa-star-o');
+    }
+    else if(gameState.moves === TWO_STAR_THRESHOLD) {
+        this.stars = 1;
+        $(stars[1]).removeClass('fa-star').addClass('fa-star-o');
+    }
+    else if(gameState.moves === ONE_STAR_THRESHOLD) {
+        this.stars = 0;
+        $(stars[0]).removeClass('fa-star').addClass('fa-star-o');
+    }
+}
+
+/**
  * Attach event listeners to all card elements and the reset button.
  * @param deck
  * @returns {*|jQuery}
@@ -85,7 +89,7 @@ function attachEventListeners(deck) {
  * Read in array of card elements from index.html
  */
 function getDeckFromHTML(){
-    return $(".card");
+    return $('.card');
 }
 
 /*
@@ -109,7 +113,7 @@ function shuffle(array) {
  * Create the necessary DOM elements to represent the cards and attach event listeners.
  */
 function drawDeck(deck) {
-    let deckNode = $(".deck");
+    let deckNode = $('.deck');
     deckNode.empty(); //clear default deck from the DOM
     deck = attachEventListeners(deck);
     $(deck).removeClass('open match show');
@@ -134,11 +138,11 @@ function isMatch(card) {
  * Hide card symbol.
  */
 function flipFaceDown(card) {
-    card.removeClass("open show");
+    card.removeClass('open show');
 }
 
 /**
- * Re-attach event listener.
+ * Allow user from being able to click the card to turn it over.
  * @param card
  */
 function unlock(card) {
@@ -151,13 +155,17 @@ function unlock(card) {
  * @returns {Promise.<void>}
  */
 async function resetMismatchedCards(card) {
-    await sleep(250); //allow the user to see the symbol of the card just revealed
+    await sleep(1000); //allow the user to see the symbol of the card just revealed
     unlock(card);//re-attach event listener
     unlock(gameState.cardToMatch);//re-attach event listener
     flipFaceDown(card);
     flipFaceDown(gameState.cardToMatch);
 }
 
+/**
+ * Get the time elapsed between now and when the user began playing.
+ * @returns {number}
+ */
 function getTimeElapsed() {
     const endTime = new Date();
     const timeElapsed_ms = endTime - gameState.startTime;
@@ -170,8 +178,8 @@ function getTimeElapsed() {
 function checkWinCondition() {
     if (gameState.matches === gameState.MAX_MATCHES) {
         $('.btn-primary').on('click', beginGame);
-        $(".modal-body").text(`Thank you for playing. You have completed the game in ${getTimeElapsed()} seconds with ${gameState.stars} stars`);
-            $("#win-modal").modal();
+        $('.modal-body').text(`Thank you for playing. You have completed the game in ${getTimeElapsed()} seconds with ${gameState.stars} stars`);
+            $('#win-modal').modal();
     }
 }
 /**
@@ -179,26 +187,36 @@ function checkWinCondition() {
  * @param card
  */
 function markAsMatched(card) {
-    card.addClass("match");
+    card.addClass('match');
 }
 
+/**
+ * Prevent user from being able to click the card to turn it over.
+ * @param card
+ */
 function lock(card) {
     card.off();
 }
 
+/**
+ * Flip card face up, revealing its symbol.
+ * @param card
+ */
 function flipFaceUp(card) {
-    card.addClass("open show");
+    card.addClass('open show');
 }
 
 /*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the ope n position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
+ * Implementation of game logic whe user clicks a card.
+ *
+ * If a card is clicked:
+ *  - display the card's symbol.
+ *  - keep track of the overturned card's symbol
+ *  - if the user has just overturned another card, check to see if the two cards match
+ *    + if the cards do match, lock the cards in the open position.
+ *    + if the cards do not match, hide the card's symbol.
+ *    + increment the move counter and display it on the page.
+ *    + if all cards have matched, display a modal with the final score.
  */
 async function cardClicked() {
     let card = $(this);

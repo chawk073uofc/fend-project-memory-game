@@ -42,12 +42,21 @@ let gameState = {
         this.cardToMatch = null;
         this.moves = this.matches = 0;
         this.startTime = new Date();
+        setTimeout(showTimeElapsed(), 0);
         this.stars = 3;
         $('.moves').text('0');
     }
 };
 
 beginGame();
+
+async function showTimeElapsed() {
+    while(true) {
+        await sleep(1000);
+        $('.time-display').text(getTimeElapsed());
+        console.log(getTimeElapsed());
+    }
+}
 
 /*
  * Called when page loads or user clicks the reset button.

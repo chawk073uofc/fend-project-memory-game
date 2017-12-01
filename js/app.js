@@ -54,7 +54,6 @@ async function showTimeElapsed() {
     while(true) {
         await sleep(1000);
         $('.time-display').text(getTimeElapsed());
-        console.log(getTimeElapsed());
     }
 }
 
@@ -158,7 +157,7 @@ async function resetMismatchedCards(card) {
 function getTimeElapsed() {
     const endTime = new Date();
     const timeElapsed_ms = endTime - gameState.startTime;
-    return timeElapsed_ms/1000;//convert ms to sec
+    return Math.trunc(timeElapsed_ms/1000);//convert ms to sec
 }
 
 /**

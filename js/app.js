@@ -24,7 +24,7 @@ let gameState = {
         this.cardToMatch = null;
         this.moves = this.matches = 0;
         this.startTime = new Date();
-        setTimeout(showTimeElapsed(), 0);
+        setTimeout(showTimeElapsed);
         this.stars = 3;
         $('.moves').text('0');
     }

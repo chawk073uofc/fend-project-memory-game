@@ -62,15 +62,15 @@ function updateStars() {
     const ONE_STAR_THRESHOLD = 75;
     let stars = $('.star');
     if(gameState.moves === THREE_STAR_THRESHOLD){
-        this.stars = 2;
+        gameState.stars = 2;
         $(stars[2]).removeClass('fa-star').addClass('fa-star-o');
     }
     else if(gameState.moves === TWO_STAR_THRESHOLD) {
-        this.stars = 1;
+        gameState.stars = 1;
         $(stars[1]).removeClass('fa-star').addClass('fa-star-o');
     }
     else if(gameState.moves === ONE_STAR_THRESHOLD) {
-        this.stars = 0;
+        gameState.stars = 0;
         $(stars[0]).removeClass('fa-star').addClass('fa-star-o');
     }
 }
@@ -155,6 +155,7 @@ function unlock(card) {
  * @returns {Promise.<void>}
  */
 async function resetMismatchedCards(card) {
+    //todo: lock all cards during sleep
     await sleep(1000); //allow the user to see the symbol of the card just revealed
     unlock(card);//re-attach event listener
     unlock(gameState.cardToMatch);//re-attach event listener

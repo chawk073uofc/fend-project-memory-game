@@ -26,6 +26,12 @@ let gameState = {
         this.startTime = new Date();
         setTimeout(showTimeElapsed);
         this.stars = 3;
+        let starsNode = $('.stars');
+        starsNode.empty();
+        for(let i = 1; i <= 3; i++)
+        {
+            starsNode.append("<li><i class='star fa fa-star'></i></li>");
+        }
         $('.moves').text('0');
     }
 };

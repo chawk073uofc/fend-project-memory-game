@@ -5,10 +5,11 @@
 let gameState = {
     cardToMatch: null,
     moves: 0,
-    startTime: new Date(),
     matches: 0,
     MAX_MATCHES: 8,
     stars: 3,
+    startTime: null,
+    timerID: null,
     isAttemptingMatch: false, //true when the user has just flipped over a card and now has a chance to match that card
     hasClickedFirstCard: false, //timer begins after the user clicks a card for the first time
     incrementMoves : function() {
@@ -21,12 +22,12 @@ let gameState = {
         this.cardToMatch = card;
         this.isAttemptingMatch = true;
     },
+
     reset: function () {
         this.hasClickedFirstCard = this.isAttemptingMatch = false;
-        this.cardToMatch = null;
+        this.cardToMatch = this.startTime = null;
+        window.clearTimeout(this.timerID);
         this.moves = this.matches = 0;
-        this.startTime = new Date();
-        setTimeout(showTimeElapsed);
         this.stars = 3;
         let starsNode = $('.stars');
         starsNode.empty();
@@ -46,6 +47,10 @@ beginGame();
  */
 async function showTimeElapsed() {
     while(true) {
+        if(!gameState.hasClickedFirstCard){
+            $('.time-display').text('0');
+            return;
+        }
         await sleep(1000);
         $('.time-display').text(getTimeElapsed());
     }
@@ -55,7 +60,7 @@ async function showTimeElapsed() {
  * Called when page loads or user clicks the reset button.
  */
 function beginGame(){
-    let deck = getDeckFromHTML();
+    let deck = getDeckFromHTML();//todo: move out of this fun
     gameState.reset();
     deck = shuffle(deck);
     drawDeck(deck);
@@ -153,6 +158,7 @@ function flipFaceDown(card) {
  * Allow user from being able to click the card to turn it over.
  * @param card
  */
+//todo: allow to accept any number of cards
 function unlock(card) {
     card.on('click', cardClicked);
 }
@@ -203,6 +209,7 @@ function markAsMatched(card) {
  * Prevent user from being able to click the card to turn it over.
  * @param card
  */
+//todo: allow to accept any number of cards
 function lock(card) {
     card.off();
 }
@@ -215,8 +222,12 @@ function flipFaceUp(card) {
     card.addClass('open show');
 }
 
+/**
+ * Start keeping track of the time the user takes to win the game once they overturn their first card.
+ */
 function startTimer() {
-
+    gameState.startTime = new Date();
+    gameState.timerID = setTimeout(showTimeElapsed);
 }
 /*
  * Implementation of game logic whe user clicks a card.

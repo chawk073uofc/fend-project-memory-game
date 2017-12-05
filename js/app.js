@@ -10,6 +10,7 @@ let gameState = {
     MAX_MATCHES: 8,
     stars: 3,
     isAttemptingMatch: false, //true when the user has just flipped over a card and now has a chance to match that card
+    hasClickedFirstCard: false, //timer begins after the user clicks a card for the first time
     incrementMoves : function() {
         this.moves++;
         $('.move-label').text((this.moves === 1) ? 'Move' : 'Moves');
@@ -21,6 +22,7 @@ let gameState = {
         this.isAttemptingMatch = true;
     },
     reset: function () {
+        this.hasClickedFirstCard = this.isAttemptingMatch = false;
         this.cardToMatch = null;
         this.moves = this.matches = 0;
         this.startTime = new Date();
@@ -213,6 +215,9 @@ function flipFaceUp(card) {
     card.addClass('open show');
 }
 
+function startTimer() {
+
+}
 /*
  * Implementation of game logic whe user clicks a card.
  *
@@ -226,6 +231,10 @@ function flipFaceUp(card) {
  *    + if all cards have matched, display a modal with the final score.
  */
 async function cardClicked() {
+    if(!gameState.hasClickedFirstCard){
+        gameState.hasClickedFirstCard = true;
+        startTimer();
+    }
     let card = $(this);
 
     gameState.incrementMoves();

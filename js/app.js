@@ -73,7 +73,6 @@ function beginGame(){
 function updateStars() {
     const THREE_STAR_THRESHOLD = 20;
     const TWO_STAR_THRESHOLD = 45;
-    const ONE_STAR_THRESHOLD = 75;
     let stars = $('.star');
     if(gameState.moves === THREE_STAR_THRESHOLD){
         gameState.stars = 2;
@@ -82,10 +81,6 @@ function updateStars() {
     else if(gameState.moves === TWO_STAR_THRESHOLD) {
         gameState.stars = 1;
         $(stars[1]).removeClass('fa-star').addClass('fa-star-o');
-    }
-    else if(gameState.moves === ONE_STAR_THRESHOLD) {
-        gameState.stars = 0;
-        $(stars[0]).removeClass('fa-star').addClass('fa-star-o');
     }
 }
 

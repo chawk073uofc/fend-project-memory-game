@@ -17,7 +17,7 @@ Implementation of the classic card matching game where players attempt to match 
 
 ## How To Play
 
-Click a card to see it's symbol. Try to match this card by overturning another card with the same symbol. If you succeed in matching a pair of cards, they will remain overturned. Otherwise they will flip themselves back over. Match all the cards to win. You will be rewarded with between zero and three stars based on the number of moves you make before matching all cards. 
+Click a card to see it's symbol. Try to match this card by overturning another card with the same symbol. If you succeed in matching a pair of cards, they will remain overturned. Otherwise they will flip themselves back over. Match all the cards to win. You will be rewarded with between one and three stars based on the number of moves you make before matching all cards. 
 
 ## Dependencies
 

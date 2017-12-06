@@ -10,6 +10,8 @@ let gameState = {
     stars: 3,
     startTime: null,
     timerID: null,
+    defaultDeck: getDeckFromHTML(),
+    unmatchedCards: null,
     isAttemptingMatch: false, //true when the user has just flipped over a card and now has a chance to match that card
     hasClickedFirstCard: false, //timer begins after the user clicks a card for the first time
     incrementMoves : function() {
@@ -60,10 +62,9 @@ async function showTimeElapsed() {
  * Called when page loads or user clicks the reset button.
  */
 function beginGame(){
-    let deck = getDeckFromHTML();//todo: move out of this fun
     gameState.reset();
-    deck = shuffle(deck);
-    drawDeck(deck);
+    gameState.unmatchedCards = shuffle(gameState.defaultDeck);
+    drawDeck(gameState.unmatchedCards);
 }
 
 /**
@@ -170,6 +171,7 @@ function unlock(card) {
  */
 async function resetMismatchedCards(card) {
     //todo: lock all cards during sleep
+
     await sleep(1000); //allow the user to see the symbol of the card just revealed
     unlock(card);//re-attach event listener
     unlock(gameState.cardToMatch);//re-attach event listener
@@ -204,14 +206,22 @@ function checkWinCondition() {
 function markAsMatched(card) {
     card.addClass('match');
 }
-
 /**
  * Prevent user from being able to click the card to turn it over.
- * @param card
+ * @param cards
  */
-//todo: allow to accept any number of cards
 function lock(card) {
-    card.off();
+            card.off();
+}
+
+/**
+ * Prevent user from being able to click cards to turn them over.
+ * @param cards
+ */
+function lockCards(cards) {
+        for (let card of cards) {
+            card.off();
+        }
 }
 
 /**
@@ -254,6 +264,7 @@ async function cardClicked() {
 
     if(gameState.isAttemptingMatch){
         if(isMatch(card)){
+            gameState.unmatchedCards.remove
             gameState.matches++;
             markAsMatched(card);
             markAsMatched(gameState.cardToMatch);

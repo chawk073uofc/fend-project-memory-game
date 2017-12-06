@@ -154,9 +154,17 @@ function flipFaceDown(card) {
  * Allow user from being able to click the card to turn it over.
  * @param card
  */
-//todo: allow to accept any number of cards
 function unlock(card) {
     card.on('click', cardClicked);
+}
+
+function unlockUnmatchedCards() {
+    for(let i = 0; i < gameState.unmatchedCards.length; i++) {
+        let card = $(gameState.unmatchedCards[i]);
+        if(!card.hasClass('match')){
+            unlock(card);
+        }
+    }
 }
 
 /**
@@ -165,11 +173,7 @@ function unlock(card) {
  * @returns {Promise.<void>}
  */
 async function resetMismatchedCards(card) {
-    //todo: lock all cards during sleep
-
     await sleep(1000); //allow the user to see the symbol of the card just revealed
-    unlock(card);//re-attach event listener
-    unlock(gameState.cardToMatch);//re-attach event listener
     flipFaceDown(card);
     flipFaceDown(gameState.cardToMatch);
 }
@@ -219,6 +223,10 @@ function lockCards(cards) {
         }
 }
 
+function lockAllCards() {
+    $('.card').off();
+}
+
 /**
  * Flip card face up, revealing its symbol.
  * @param card
@@ -247,19 +255,21 @@ function startTimer() {
  *    + if all cards have matched, display a modal with the final score.
  */
 async function cardClicked() {
+    let card = $(this);
+    lock(card);//must not allow double click of same card to result in a match
     if(!gameState.hasClickedFirstCard){
         gameState.hasClickedFirstCard = true;
         startTimer();
     }
-    let card = $(this);
 
     gameState.incrementMoves();
-    lock(card);//must not allow double click of same card to result in a match
     flipFaceUp(card);
 
     if(gameState.isAttemptingMatch){
+        lockAllCards();
+        gameState.isAttemptingMatch = false;
+
         if(isMatch(card)){
-            gameState.unmatchedCards.remove
             gameState.matches++;
             markAsMatched(card);
             markAsMatched(gameState.cardToMatch);
@@ -270,7 +280,7 @@ async function cardClicked() {
         }
 
         gameState.cardToMatch = null;
-        gameState.isAttemptingMatch = false;
+        unlockUnmatchedCards();
     }
 
     else{

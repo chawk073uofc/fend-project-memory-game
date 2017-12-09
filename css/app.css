@@ -110,3 +110,20 @@ h1 {
     float: right;
     cursor: pointer;
 }
+
+@media (max-device-width: 568px) and (orientation: landscape) {
+    .container {
+        vertical-align: center;
+    }
+    .deck {
+        width: 95%;
+        height: 300px;
+        min-height: 300px;
+        justify-content: space-evenly;
+    }
+    .deck .card {
+        height: 100px;
+        width: 100px;
+        line-height: 110px;
+    }
+}

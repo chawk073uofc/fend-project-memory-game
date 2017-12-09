@@ -158,6 +158,9 @@ function unlock(card) {
     card.on('click', cardClicked);
 }
 
+/**
+ * Unlock all unmatched cards.
+ */
 function unlockUnmatchedCards() {
     for(let i = 0; i < gameState.unmatchedCards.length; i++) {
         let card = $(gameState.unmatchedCards[i]);
